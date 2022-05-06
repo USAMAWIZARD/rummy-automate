@@ -1,11 +1,14 @@
 import cv2
 from PIL import Image,ImageFilter
 import os
+import time
 
 from find_image import *
 croped_grp={}
 all_groups={}
 load_comparison_images()
+#print(len(comparison_dict.keys()))
+
 def ResizeWithAspectRatio(image, width=None, height=None, inter=cv2.INTER_AREA):
     dim = None
     (h, w) = image.shape[:2]
@@ -59,27 +62,32 @@ opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=1)
 # Draw rectangles
 cnts = cv2.findContours(opening, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-for c in cnts:
-    x,y,w,h = cv2.boundingRect(c)
 
-    if w>200 and h>50:
-        diclen="group"+str(len(croped_grp.keys()))
-        croped_group = image[y:y+h, x:x+w]
-        all_groups[diclen]={}
-        print(x,y,w,h)
-        if x>300:
-            croped_grp["imagedeck"]=image #its a deck card
-            cards_in_this_group= find_card_in_group(croped_group)
-            all_groups[diclen]["deck"]=cards_in_this_group
-            continue
+# for c in cnts:
+x,y,w,h = cv2.boundingRect(c)
 
-        #croped_grp[diclen]["image"]=croped_group
-        all_groups[diclen]["x"]=x
-        all_groups[diclen]["y"]=y
-        all_groups[diclen]["h"]=h
-        all_groups[diclen]["w"]=w
-        cards_in_this_group= find_card_in_group(croped_group)
-        all_groups[diclen]["cards"]=cards_in_this_group
+# if w>200 and h>50:
+
+diclen="group"+str(len(croped_grp.keys()))
+croped_group = [image[y:3000, x:500]]
+
+all_groups[diclen]={}
+print(x,y,w,h)
+# if x>300:
+croped_grp["imagedeck"]=image #its a deck card
+cards_in_this_group= find_card_in_group(croped_group)
+all_groups[diclen]["deck"]=cards_in_this_group
+#continue
+
+#croped_grp[diclen]["image"]=croped_group
+all_groups[diclen]["x"]=x
+all_groups[diclen]["y"]=y
+all_groups[diclen]["h"]=h
+all_groups[diclen]["w"]=w
+cards_in_this_group= find_card_in_group(croped_group)
+all_groups[diclen]["cards"]=cards_in_this_group
+
+
 print(all_groups)
 
 cv2.imshow('thresh', ResizeWithAspectRatio(thresh,300))
