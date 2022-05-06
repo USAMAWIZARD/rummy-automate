@@ -30,10 +30,8 @@ def find_card_in_group(croped_group):
 	all_file_names=comparison_dict.keys()
 
 	for card_name in all_file_names:
-		print("start",time.time())
 
 		(found,x,y,h,w)=find_card(card_name,croped_group)
-		print("end",time.time())
 
 		if found: #change to variable
 			cards_in_this_group[card_name]={'x':x,'y':y,'h':h,'w':w}

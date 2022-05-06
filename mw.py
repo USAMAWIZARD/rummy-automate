@@ -4,6 +4,8 @@ import os
 import time
 
 from find_image import *
+print("start",time.time())
+
 croped_grp={}
 all_groups={}
 load_comparison_images()
@@ -89,6 +91,7 @@ all_groups[diclen]["cards"]=cards_in_this_group
 
 
 print(all_groups)
+print("end",time.time())
 
 cv2.imshow('thresh', ResizeWithAspectRatio(thresh,300))
 cv2.imshow('opening', ResizeWithAspectRatio(opening,300))
