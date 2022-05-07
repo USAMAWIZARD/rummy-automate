@@ -1,9 +1,9 @@
 from PIL import Image,ImageFilter
-
-img = Image.open("2.png")
+no=6
+img = Image.open("./without-binnary/"+str(no)+".png")
 img = img.convert("L")
 img = img.filter(ImageFilter.FIND_EDGES)
-img.save("result.png")
+img.save("./binnary-screenshot-edge-images/"+str(no)+".png")
 
 #0.00999903678894043-0.05800223350524902
 #520*0.00999903678894043=0.05800223350524902
@@ -15,4 +15,6 @@ img.save("result.png")
 
 
 # not optimaized
-#
+#1651837519.9431772 -1651837517.2372568 = 2.705920457839966
+#1651837594.979718 -1651837592.4646626 = 2.5150554180145264
+#1651837624.0804956 -1651837621.5444937 = 2.5360019207000732

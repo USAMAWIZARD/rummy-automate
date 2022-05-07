@@ -25,53 +25,40 @@ def ResizeWithAspectRatio(image, width=None, height=None, inter=cv2.INTER_AREA):
         dim = (width, int(h * r))
 
     return cv2.resize(image, dim, interpolation=inter)
-def find_card_in_group(croped_group):
-	cards_in_this_group = {}
+
+def find_cards_on_screen(croped_screen):
+	cards_on_screen = {}
 	all_file_names=comparison_dict.keys()
-
 	for card_name in all_file_names:
-
-		(found,x,y,h,w)=find_card(card_name,croped_group)
-
-		if found: #change to variable
-			cards_in_this_group[card_name]={'x':x,'y':y,'h':h,'w':w}
-			#print(found) #add card and name
-
-	print(cards_in_this_group)		
-	return cards_in_this_group
+		(found,x,y,h,w)=find_card(card_name,croped_screen)
+		if found:
+			cards_on_screen[card_name]={'x':x[0],'y':y[0],'h':h,'w':w}	
+		else:
+			print("not found")
+	return cards_on_screen
 		
 
-
 def find_card(image_name,image):
-	 #change paratmeter to screen shot or frame
+	#change paratmeter to screen shot or frame
 	template = comparison_dict[image_name]
-	#print(image.shape,template.shape)
-	# print(template.shape(),template.type,template.dims)
-	#print(croped_group)
 	result = cv2.matchTemplate(image[0], template, cv2.TM_CCOEFF_NORMED)
 	threshold = 0.8
 	loc = np.where( result >= threshold)
 	height, width = template.shape[:2]
 	if len(loc[0])==0:
 		return (False,0,0,0,0)
-	#print(height,width,loc[0])
-	#print(loc)
 	x = []
 	y = []
 
 	for pt in zip(*loc[::-1]):
 		x.append(pt[0])
-		y.append(pt[1])
-
+		y.append(pt[1])      # have to write for multiple same cards on the screen
 		cv2.rectangle(image[0], pt, (pt[0]+width, pt[1]+height), (0,0,255), 5)
 	return (True,x,y,height,width)
 
 	cv2.imshow("detected",ResizeWithAspectRatio(image[0],width=300))
-	cv2.waitKey(0)
+	cv2.waitKey(0)					#test code
 	cv2.destroyAllWindows()
 
 
 
-
-# group  5 cards 10*52=520
-#  52 
