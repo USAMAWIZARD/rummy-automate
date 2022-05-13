@@ -4,7 +4,7 @@ from PIL import Image, ImageOps ,ImageFilter
 import time
 import numpy as np
 import cv2
-card_names=['Club','DIM','2','3','4','5','6','7','8','9','10','A','J','K','Q','Joker','JCard',"Heart","Spade"]
+card_names=['clubs','diamonds','2','3','4','5','6','7','8','9','10','ace','jack','king','queen','joker','JCard',"hearts","spades"]
 
 
 # Load the model

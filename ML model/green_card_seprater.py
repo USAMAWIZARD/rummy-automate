@@ -4,7 +4,7 @@ import time
 import cv2
 from card_classification_model import *
 def get_cards_on_screen(image_name):
-    mycards={}
+    mycards=[]
     image=cv2.imread(image_name)
     points = []
     for i in range(2180):
@@ -17,15 +17,15 @@ def get_cards_on_screen(image_name):
                         image = cv2.circle(image, (400,i), 10, (0, 0, 255), 5)
                         points.append(i)
     hi = 0
-    mycards={}
+    mycards=[]
     groupno=0
     
     while hi < (len(points)-1):
-        groupno+=1
 
         b=91
         h = (points[hi+1] - points[hi])-130
         #cv2.rectangle(image, (400, points[hi]), (400 + 100, points[hi] ), (11,3,111), 3) #draw the rectangle around the total cards
+        mycards.append([])
         for i  in range(round(h/91)):
             #cv2.rectangle(image, (400-20, points[hi]), (400+90 , points[hi] +b), (11,i,111), 10) #draw the rectangle around the total cards
             c=b-90
@@ -35,10 +35,18 @@ def get_cards_on_screen(image_name):
             image_classified_firsthalf=get_card_name(firsthalf)
             image_classified_secondhalf=get_card_name(secondhalf)
             image_classified_thirdhalf=get_card_name(thirdhalf)
-            mycards["group"+str(groupno)+"-"+str(i)]={"first":image_classified_firsthalf,"second":image_classified_secondhalf,"third":image_classified_thirdhalf}
+            #mycards["group"+str(groupno)+"-"+str(i)]={"first":image_classified_firsthalf,"second":image_classified_secondhalf,"third":image_classified_thirdhalf}
+            if image_classified_thirdhalf=="JCard":
+                mycards[groupno].append(["joker",image_classified_secondhalf])
+            elif image_classified_firsthalf=="joker":
+                mycards[groupno].append(["joker",None])
+            else:
+                mycards[groupno].append([image_classified_firsthalf,image_classified_secondhalf])
             b+=91
             #cv2.imshow(image_classified_thirdhalf+str(i)+str(hi), thirdhalf)
         hi+=2
+        groupno+=1
+
     return mycards
 
 # print("end",time.time()-start)
