@@ -126,7 +126,7 @@ def sequenceCards(cards):
         while j < len(cards[i]):
             if isJoker(cards[i][j]):
                 jokers.append(cards[i][j])
-                if j == (len(cards[i]) - 1):
+                if len(cards[i]) == 1:
                     new_cards.remove([])
             else:
                 if ranks[cards[i][j][0]] == ranks['ace']:

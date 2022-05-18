@@ -23,5 +23,6 @@ set_hand_cards = [['8', 'diamonds'], ['8', 'spades'], ['8', 'clubs'], ['8', 'dia
 
 # hand_cards = [[['4', 'clubs'], ['king', 'clubs'], ['ace1', 'clubs']]]
 
-# hand_cards = [[['2', 'hearts'], ['joker', 'joker'], ['joker', 'joker']]]
+hand_cards = [[['2', 'hearts'], ['joker', 'joker'], ['joker', 'joker']]]
+# hand_cards = [[['joker', 'joker'], ['2', 'joker'], ['9', 'hearts']]]
 
