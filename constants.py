@@ -15,7 +15,7 @@ set_hand_cards = [['8', 'diamonds'], ['8', 'spades'], ['8', 'clubs'], ['8', 'dia
 
 # hand_cards = [[['2', 'clubs'], ['3', 'clubs'], ['4', 'clubs'], ['7', 'clubs'], ['8', 'clubs'], ['jack', 'clubs'], ['king', 'clubs'], ['ace1', 'clubs']]]
 
-# hand_cards = [[['2', 'clubs'], ['3', 'clubs'], ['4', 'clubs'], ['7', 'clubs'], ['8', 'clubs'], ['jack', 'clubs'], ['king', 'clubs'], ['ace1', 'clubs']]]
+# hand_cards = [[['2', 'clubs'], ['3', 'clubs'], ['4', 'clubs'], ['7', 'clubs'], ['10', 'clubs'], ['8', 'clubs'], ['jack', 'clubs'], ['king', 'clubs'], ['ace1', 'clubs']]]
 
 # hand_cards = [[['2', 'clubs'], ['3', 'clubs'], ['6', 'clubs'], ['8', 'clubs'], ['9', 'clubs'], ['jack', 'clubs'], ['king', 'clubs'], ['ace1', 'clubs']]]
 
@@ -23,6 +23,10 @@ set_hand_cards = [['8', 'diamonds'], ['8', 'spades'], ['8', 'clubs'], ['8', 'dia
 
 # hand_cards = [[['4', 'clubs'], ['king', 'clubs'], ['ace1', 'clubs']]]
 
-hand_cards = [[['2', 'hearts'], ['joker', 'joker'], ['joker', 'joker']]]
-# hand_cards = [[['joker', 'joker'], ['2', 'joker'], ['9', 'hearts']]]
+#####
+# hand_cards = [[['joker', 'joker'], ['joker', 'joker'], ['joker', 'joker']]]
+
+# hand_cards = [[['2', 'hearts'], ['joker', 'joker'], ['joker', 'joker']]]
+
+hand_cards = [[['joker', 'joker'], ['2', 'clubs'], ['9', 'hearts']]]
 

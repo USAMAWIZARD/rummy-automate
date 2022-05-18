@@ -1,8 +1,7 @@
-from itertools import count
-from operator import le
 from constants import *
 from check import *
 from copy import deepcopy
+from math import ceil
 from pprint import pprint
 
 def findJoker(cards, suit=True):
@@ -16,7 +15,7 @@ def findJoker(cards, suit=True):
 jokers = []
 new_cards = []
 
-def getJoker(suit):
+def getJoker(suit = None):
     global jokers
     if ["joker", suit] in jokers:
         jokers.remove(["joker", suit])
@@ -75,7 +74,7 @@ def splitOnDifference(p_cards):
                 i += 1
             else:
                 joker_status = True
-        if difference > 2 or joker_status:
+        if difference > 2 or (joker_status and difference == 2):
             slice_end = i + 1
             temp = p_cards[slice_start:slice_end]
             separate_cards.append(temp)
@@ -112,7 +111,8 @@ def splitOnDifference(p_cards):
                     separate_cards[i].append(joker)
                 else:
                     separate_cards[i] = [joker] + separate_cards[i]
-        i += 1
+        i += 1    
+    
     return separate_cards
 
 
@@ -185,11 +185,11 @@ def groupSingleSequenceCards(p_cards):
             else:
                 cards.append(card)
     sequence_cards = deepcopy(cards)
-    separate_sequence = dict()
+    separate_sequence = {}
     for sequence_card in sequence_cards:
         suit = getSuit(sequence_card)
         if suit + '-0' in separate_sequence:
-            suit_count = getLastSameSuitCount(separate_sequence.keys(), suit)
+            suit_count = getLastSameSuitCount(separate_sequence.keys(), suit) + 1
             separate_sequence[suit + '-' + str(suit_count)] = sequence_card
         else:
             separate_sequence[suit + '-0'] = sequence_card
@@ -203,7 +203,7 @@ def setCards(p_cards):
 	temp_ranks = deepcopy(ranks)
 	if 'ace1' in temp_ranks:
 		temp_ranks['ace1'] = temp_ranks['ace']
-	set_groups = dict()
+	set_groups = {}
 	i = 0
 	while i < len(p_cards):
 		if not isJoker(p_cards[i]):
@@ -232,7 +232,7 @@ def setCards(p_cards):
 
 def groupSingleSetCards(p_cards):
 	global four_cards
-	separate_sets = {'sets': dict(), 'rest': dict()}
+	separate_sets = {'sets': {}, 'rest': {}}
 	for rank in p_cards:
 		if len(p_cards[rank]['cards']) > 1:
 			if len(p_cards[rank]['cards']) > 3 and four_cards:
@@ -242,10 +242,28 @@ def groupSingleSetCards(p_cards):
 			separate_sets['rest'][rank] = p_cards[rank]
 	return separate_sets
 
+def addDeckJokerSingleCard(p_cards):
+    joker = getJoker()
+    if joker != False:
+        if p_cards['rest'] == {}:
+            i = 0
+            start = 0
+            while i < ceil(len(jokers) / 3):
+                end = start + 4
+                suit = getSuit(jokers)
+                if suit + '-0' in p_cards['sequences']:
+                    suit_count = getLastSameSuitCount(p_cards['sequences'].keys(), suit) + 1
+                    p_cards['sequences'][suit + '-' + str(suit_count)] = jokers[start:end]
+                else:
+                    p_cards['sequences'][suit + '-0'] = jokers[start:end]
+                start = end
+                i += 1
+    return p_cards
+
 sequence_cards = sequenceCards(hand_cards)
 sequence_cards = groupSingleSequenceCards(sequence_cards)
 set_cards = setCards(sequence_and_rest_cards['rest'])
 set_cards = groupSingleSetCards(set_cards)
 sequence_and_set_cards = {'sequences': sequence_and_rest_cards['sequence']} | set_cards
-
+sequence_and_set_cards = addDeckJokerSingleCard(sequence_and_set_cards)
 pprint(sequence_and_set_cards)
