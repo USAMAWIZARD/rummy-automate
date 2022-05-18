@@ -2,6 +2,8 @@ ranks = {'joker': 0, 'ace': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '
 
 suits = ['spades', 'hearts', 'diamonds', 'clubs']
 
+four_cards = True
+
 # deck = ['queen', 'clubs']
 deck = ['8', 'diamonds']
 
@@ -21,5 +23,5 @@ set_hand_cards = [['8', 'diamonds'], ['8', 'spades'], ['8', 'clubs'], ['8', 'dia
 
 # hand_cards = [[['4', 'clubs'], ['king', 'clubs'], ['ace1', 'clubs']]]
 
-# hand_cards = [[['4', 'clubs'], ['7', 'clubs'], ['ace1', 'clubs']]]
+# hand_cards = [[['2', 'hearts'], ['joker', 'joker'], ['joker', 'joker']]]
 
