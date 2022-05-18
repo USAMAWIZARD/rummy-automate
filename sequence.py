@@ -31,7 +31,6 @@ def getJoker(suit):
         return joker
     return False
 
-
 def checkIfCardRankExists(cards, rank):
     i = 0
     while i < len(cards):
@@ -116,7 +115,6 @@ def splitOnDifference(p_cards):
 
 def sequenceCards(cards):
     global jokers, new_cards
-
     i = 0
     ace_counter = 1
     while i < len(cards):
@@ -155,6 +153,7 @@ def sequenceCards(cards):
 
 
 def groupSingleCards(p_cards):
+    global sequence_and_rest_cards
     cards = []
     single_cards = []
     four_cards = True
@@ -173,9 +172,51 @@ def groupSingleCards(p_cards):
                 cards.append(card)
             else:
                 cards.append(card)
+    sequence_and_rest_cards['sequence'] = deepcopy(cards)
+    sequence_and_rest_cards['rest'] = deepcopy(single_cards)
     cards.append(single_cards)
     return cards
 
+def setCards(p_cards):
+	global ranks, deck
+	temp_ranks = deepcopy(ranks)
+	if 'ace1' in temp_ranks:
+		temp_ranks['ace1'] = temp_ranks['ace']
+	set_groups = dict()
+	i = 0
+	while i < len(p_cards):
+		if not isJoker(p_cards[i]):
+			if ranks[p_cards[i][0]] in set_groups:
+				if p_cards[i][1] not in set_groups[ranks[p_cards[i][0]]]['suits']:
+					set_groups[ranks[p_cards[i][0]]]['cards'].append(p_cards[i])
+					set_groups[ranks[p_cards[i][0]]]['suits'].append(p_cards[i][1])
+			else:
+				set_groups[ranks[p_cards[i][0]]] = {'suits': [p_cards[i][1]], 'cards': [p_cards[i]]}
+		i += 1
+
+	for rank in set_groups:
+		if len(set_groups[rank]['cards']) == 2:
+			if deck != [] and deck[1] not in set_groups[rank]['suits']:
+				set_groups[rank]['cards'].append(deck)
+				deck = []
+				continue
+			joker = getJoker(set_groups[rank]['suits'][0])
+			if joker != False:
+				set_groups[rank]['cards'].append(joker)
+			else:
+				break
+	
+	return set_groups
 
 sequence_cards = sequenceCards(hand_cards)
 sequence_cards = groupSingleCards(sequence_cards)
+
+print(sequence_cards)
+
+print()
+
+set_cards = setCards(sequence_and_rest_cards['rest'])
+# set_cards = setCards(set_hand_cards)
+
+print(set_cards)
+
