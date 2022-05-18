@@ -1,3 +1,4 @@
+from glob import glob
 from constants import *
 from check import *
 from copy import deepcopy
@@ -78,7 +79,7 @@ def splitOnDifference(p_cards):
             slice_end = i + 1
             temp = p_cards[slice_start:slice_end]
             separate_cards.append(temp)
-            slice_start = i + 1
+            slice_start = slice_end
         i += 1
 
     if slice_end < len(p_cards):
@@ -217,7 +218,7 @@ def setCards(p_cards):
 
 	for rank in set_groups:
 		if len(set_groups[rank]['cards']) == 2:
-			if deck != [] and deck[1] not in set_groups[rank]['suits']:
+			if deck != [] and deck[1] not in set_groups[rank]['suits'] and checkIfCardRankExists(set_groups[rank]['cards'], temp_ranks[deck[0]]):
 				set_groups[rank]['cards'].append(deck)
 				set_groups[rank]['suits'].append(deck[1])
 				deck = []
@@ -239,25 +240,44 @@ def groupSingleSetCards(p_cards):
 				four_cards = False
 			separate_sets['sets'][rank] = p_cards[rank]
 		else:
-			separate_sets['rest'][rank] = p_cards[rank]
+			separate_sets['rest'][rank] = p_cards[rank]['cards'][0]
 	return separate_sets
 
 def addDeckJokerSingleCard(p_cards):
-    joker = getJoker()
-    if joker != False:
+    global jokers
+    if jokers != []:
         if p_cards['rest'] == {}:
             i = 0
-            start = 0
             while i < ceil(len(jokers) / 3):
-                end = start + 4
                 suit = getSuit(jokers)
                 if suit + '-0' in p_cards['sequences']:
                     suit_count = getLastSameSuitCount(p_cards['sequences'].keys(), suit) + 1
-                    p_cards['sequences'][suit + '-' + str(suit_count)] = jokers[start:end]
+                    p_cards['sequences'][suit + '-' + str(suit_count)] = jokers[:4]
                 else:
-                    p_cards['sequences'][suit + '-0'] = jokers[start:end]
-                start = end
+                    p_cards['sequences'][suit + '-0'] = jokers[:4]
+                del jokers[0:4]
                 i += 1
+            jokers = []
+        else:
+            print("jokers", jokers)
+            temp_cards = deepcopy(p_cards)
+            for rank in temp_cards['rest']:
+                if jokers != []:
+                    suit = temp_cards['rest'][rank][1]
+                    suit_count = 0
+                    if suit + '-0' in temp_cards['sequences']:
+                        suit_count = getLastSameSuitCount(temp_cards['sequences'].keys(), suit) + 1
+                    p_cards['sequences'][suit + '-' + str(suit_count)] = [temp_cards['rest'][rank]]
+                    i = 0
+                    while i < ceil(len(jokers) / 2):
+                        print("jokers", jokers)
+                        p_cards['sequences'][suit + '-' + str(suit_count)].extend(jokers[:3])
+                        del jokers[:3]
+                        i += 1
+                        print("jokers", jokers)
+                    del p_cards['rest'][rank]
+                else:
+                    break
     return p_cards
 
 sequence_cards = sequenceCards(hand_cards)
