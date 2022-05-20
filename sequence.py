@@ -248,33 +248,31 @@ def addDeckJokerSingleCard(p_cards):
     if jokers != []:
         if p_cards['rest'] == {}:
             i = 0
-            while i < ceil(len(jokers) / 3):
+            limit = ceil(len(jokers) / 3)
+            while i < limit:
                 suit = getSuit(jokers)
                 if suit + '-0' in p_cards['sequences']:
                     suit_count = getLastSameSuitCount(p_cards['sequences'].keys(), suit) + 1
-                    p_cards['sequences'][suit + '-' + str(suit_count)] = jokers[:4]
+                    p_cards['sequences'][suit + '-' + str(suit_count)] = jokers[:3]
                 else:
-                    p_cards['sequences'][suit + '-0'] = jokers[:4]
-                del jokers[0:4]
+                    p_cards['sequences'][suit + '-0'] = jokers[:3]
+                del jokers[0:3]
                 i += 1
             jokers = []
         else:
-            print("jokers", jokers)
             temp_cards = deepcopy(p_cards)
             for rank in temp_cards['rest']:
                 if jokers != []:
                     suit = temp_cards['rest'][rank][1]
                     suit_count = 0
-                    if suit + '-0' in temp_cards['sequences']:
-                        suit_count = getLastSameSuitCount(temp_cards['sequences'].keys(), suit) + 1
+                    if suit + '-0' in p_cards['sequences']:
+                        suit_count = getLastSameSuitCount(p_cards['sequences'].keys(), suit) + 1
                     p_cards['sequences'][suit + '-' + str(suit_count)] = [temp_cards['rest'][rank]]
                     i = 0
                     while i < ceil(len(jokers) / 2):
-                        print("jokers", jokers)
-                        p_cards['sequences'][suit + '-' + str(suit_count)].extend(jokers[:3])
-                        del jokers[:3]
+                        p_cards['sequences'][suit + '-' + str(suit_count)].extend(jokers[:2])
+                        del jokers[:2]
                         i += 1
-                        print("jokers", jokers)
                     del p_cards['rest'][rank]
                 else:
                     break
