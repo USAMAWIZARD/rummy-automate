@@ -49,6 +49,41 @@ def get_cards_on_screen(image_name):
 
     return mycards
 
+def openJokerCard(image_name):
+    image = cv2.imread(image_name)
+    y_start_position = 0
+    y_end_position = 0
+    for i in range(500, 680):
+        if (image[i, 700][0] == image[i, 700][1] == image[i, 700][2]) and (image[i, 700][0] > 210):
+            if y_start_position == 0:
+                y_start_position = i
+            else:
+                y_end_position = i
+
+    x_start_position = 0
+    xy_start_position = y_start_position + ((y_end_position - y_start_position) // 2)
+    for i in range(570, 650):
+        if (image[xy_start_position,i][0] == image[xy_start_position,i][1] == image[xy_start_position,i][2]) and (image[xy_start_position,i][0] > 210):
+            if x_start_position == 0:
+                x_start_position = i
+                break
+
+    # image = cv2.circle(image, (700, y_start_position), 7, (0, 0, 255), 2)
+    # image = cv2.circle(image, (700, y_end_position), 7, (0, 0, 255), 2)
+    cv2.rectangle(image, (x_start_position, y_start_position), (x_start_position + 60, y_end_position), (0, 0, 255), 5) #   draw the rectangle around the joker card
+    joker_card = image[y_start_position:y_end_position, x_start_position:x_start_position + 60]     #   y :y+h, x :x+w
+    joker_card = cv2.rotate(joker_card, cv2.cv2.ROTATE_90_CLOCKWISE)
+    joker_card_name = get_card_name(joker_card)
+    print("********************")
+    print(joker_card_name)
+    print("********************")
+    cv2.namedWindow('Open Joker1', cv2.WINDOW_NORMAL)
+    cv2.namedWindow('Open Joker2', cv2.WINDOW_NORMAL)
+    cv2.imshow("Open Joker1", image)
+    cv2.imshow("Open Joker2", joker_card)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
 # print("end",time.time()-start)
 # print(mycards)
 # cv2.namedWindow('GameWindow', cv2.WINDOW_NORMAL)
