@@ -3,9 +3,10 @@ import numpy as np
 import cv2
 from card_classification_model import *
 
-def showImage(title, image):
-    cv2.namedWindow(title, cv2.WINDOW_NORMAL)
-    cv2.imshow(title, image)
+def showImage(images):
+    for title in images:
+        cv2.namedWindow(title, cv2.WINDOW_NORMAL)
+        cv2.imshow(title, images[title])
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -80,6 +81,13 @@ def openJokerDeckCard(image_name):
     joker_deck_card = image[y_start_position:y_end_position, x_start_position:x_start_position + 60]     #   y :y+h, x :x+w
     joker_deck_card = cv2.rotate(joker_deck_card, cv2.cv2.ROTATE_90_CLOCKWISE)
     joker_deck_card_name = get_card_name(joker_deck_card)
+
+    mid=image.shape[0]//2
+    reslmean=int(image.shape[0] *(3.45/100))
+    joker_deck_card1 = image[mid-reslmean:mid-20, x_start_position+123:x_start_position + 200]     #   y :y+h, x :x+w
+    joker_deck_card2 = image[mid-reslmean:mid-20, x_start_position+80:x_start_position + 130]     #   y :y+h, x :x+w
+    showImage({'image1': joker_deck_card1, 'image2': joker_deck_card2})
+
     return joker_deck_card_name, [x_start_position, y_end_position]
 
 def getOpenDeckCard(image_name, position):
@@ -97,4 +105,4 @@ def getOpenDeckCard(image_name, position):
     
     image = cv2.circle(image, (700, y_start_position), 7, (0, 0, 255), 2)
     image = cv2.circle(image, (700, y_end_position), 7, (0, 0, 255), 2)
-    showImage('image', image)
+    showImage({'image', image})
