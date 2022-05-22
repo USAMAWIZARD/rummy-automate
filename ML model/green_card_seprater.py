@@ -1,8 +1,14 @@
+from time import time
 import numpy as np
-import os
-import time
 import cv2
 from card_classification_model import *
+
+def showImage(title, image):
+    cv2.namedWindow(title, cv2.WINDOW_NORMAL)
+    cv2.imshow(title, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
 def get_cards_on_screen(image_name):
     mycards=[]
     image=cv2.imread(image_name)
@@ -31,25 +37,25 @@ def get_cards_on_screen(image_name):
             c=b-90
             firsthalf=image[points[hi] +c+10:points[hi]+c+90,400-20:400+ 90]  #y :y+h, x :x+w
             secondhalf=image[points[hi] +c+10:points[hi]+c+90,400-110:400-100+92]
-            thirdhalf=image[points[hi] +c+10:points[hi]+c+90,400-170:400-200+92]
+            # thirdhalf=image[points[hi] +c+10:points[hi]+c+90,400-170:400-200+92]
             image_classified_firsthalf=get_card_name(firsthalf)
             image_classified_secondhalf=get_card_name(secondhalf)
-            image_classified_thirdhalf=get_card_name(thirdhalf)
+            # image_classified_thirdhalf=get_card_name(thirdhalf)
             #mycards["group"+str(groupno)+"-"+str(i)]={"first":image_classified_firsthalf,"second":image_classified_secondhalf,"third":image_classified_thirdhalf}
-            if image_classified_thirdhalf=="JCard":
-                mycards[groupno].append(["joker",image_classified_secondhalf])
-            elif image_classified_firsthalf=="joker":
+            # if image_classified_thirdhalf=="JCard":
+                # mycards[groupno].append(["joker",image_classified_secondhalf])
+            if image_classified_firsthalf=="joker":
                 mycards[groupno].append(["joker",None])
             else:
                 mycards[groupno].append([image_classified_firsthalf,image_classified_secondhalf])
-            b+=91
+            b += 91
             #cv2.imshow(image_classified_thirdhalf+str(i)+str(hi), thirdhalf)
         hi+=2
         groupno+=1
 
     return mycards
 
-def openJokerCard(image_name):
+def openJokerDeckCard(image_name):
     image = cv2.imread(image_name)
     y_start_position = 0
     y_end_position = 0
@@ -70,22 +76,25 @@ def openJokerCard(image_name):
 
     # image = cv2.circle(image, (700, y_start_position), 7, (0, 0, 255), 2)
     # image = cv2.circle(image, (700, y_end_position), 7, (0, 0, 255), 2)
-    cv2.rectangle(image, (x_start_position, y_start_position), (x_start_position + 60, y_end_position), (0, 0, 255), 5) #   draw the rectangle around the joker card
-    joker_card = image[y_start_position:y_end_position, x_start_position:x_start_position + 60]     #   y :y+h, x :x+w
-    joker_card = cv2.rotate(joker_card, cv2.cv2.ROTATE_90_CLOCKWISE)
-    joker_card_name = get_card_name(joker_card)
-    print("********************")
-    print(joker_card_name)
-    print("********************")
-    cv2.namedWindow('Open Joker1', cv2.WINDOW_NORMAL)
-    cv2.namedWindow('Open Joker2', cv2.WINDOW_NORMAL)
-    cv2.imshow("Open Joker1", image)
-    cv2.imshow("Open Joker2", joker_card)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.rectangle(image, (x_start_position, y_start_position), (x_start_position + 60, y_end_position), (0, 0, 255), 5) #   draw the rectangle around the joker card
+    joker_deck_card = image[y_start_position:y_end_position, x_start_position:x_start_position + 60]     #   y :y+h, x :x+w
+    joker_deck_card = cv2.rotate(joker_deck_card, cv2.cv2.ROTATE_90_CLOCKWISE)
+    joker_deck_card_name = get_card_name(joker_deck_card)
+    return joker_deck_card_name, [x_start_position, y_end_position]
 
-# print("end",time.time()-start)
-# print(mycards)
-# cv2.namedWindow('GameWindow', cv2.WINDOW_NORMAL)
-# cv2.imshow('GameWindow' , image)
-# cv2.waitKey()
+def getOpenDeckCard(image_name, position):
+    image = cv2.imread(image_name)
+    y_start_position = 0
+    y_end_position = 0
+    start = position[1] + 300
+    for i in range(start, start + 1000):
+        if ((image[i,700][0] != image[i,700][1]) and (image[i,700][0] != image[i,700][2]) and (image[i,700][1] != image[i,700][2])) and np.argmax(image[i,700]) == 1:
+                if (image[i+5,700][0] == image[i+5,700][1] == image[i+5,700][2]) or (image[i-5,700][0] == image[i-5,700][1] == image[i-5,700][2]):
+                    if y_start_position == 0:
+                        y_start_position = i
+                    else:
+                        y_end_position = i
+    
+    image = cv2.circle(image, (700, y_start_position), 7, (0, 0, 255), 2)
+    image = cv2.circle(image, (700, y_end_position), 7, (0, 0, 255), 2)
+    showImage('image', image)

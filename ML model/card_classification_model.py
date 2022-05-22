@@ -1,7 +1,6 @@
 from asyncio import constants
 from keras.models import load_model
 from PIL import Image, ImageOps ,ImageFilter
-import time
 import numpy as np
 import cv2
 card_names=['clubs','diamonds','2','3','4','5','6','7','8','9','10','ace','jack','king','queen','joker','JCard',"hearts","spades"]
@@ -24,7 +23,6 @@ def get_card_name(image):
     image_array = np.asarray(image)
     normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
     data[0] = normalized_image_array
-    start = time.time()
     prediction = model.__call__(data)
     return card_names[np.argmax(prediction)]
 
