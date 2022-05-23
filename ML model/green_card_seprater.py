@@ -14,7 +14,7 @@ def get_cards_on_screen(image_name):
     mycards=[]
     image=cv2.imread(image_name)
     points = []
-    for i in range(2180):
+    for i in range(image.shape[0] - 10):
         if ((image[i,400][0] != image[i,400][1]) and (image[i,400][0] != image[i,400][2]) and (image[i,400][1] != image[i,400][2])) and np.argmax(image[i,400]) == 1:
                 if (image[i+5,400][0] == image[i+5,400][1] == image[i+5,400][2]) or (image[i-5,400][0] == image[i-5,400][1] == image[i-5,400][2]):
                     if points and abs(points[-1] - i) > 20: # card diffrence
