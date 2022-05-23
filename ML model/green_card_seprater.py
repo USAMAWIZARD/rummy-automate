@@ -84,17 +84,30 @@ def openJokerDeckCard(image_name):
 
     mid=image.shape[0]//2
     reslmean=int(image.shape[0] *(3.45/100))
-    joker_deck_card1 = image[mid-reslmean:mid-20, x_start_position+123:x_start_position + 200]     #   y :y+h, x :x+w
-    joker_deck_card2 = image[mid-reslmean:mid-20, x_start_position+80:x_start_position + 130]     #   y :y+h, x :x+w
-    showImage({'image1': joker_deck_card1, 'image2': joker_deck_card2})
+    open_deck_card_number = image[mid-reslmean:mid-20, x_start_position+123:x_start_position + 200]     #   y :y+h, x :x+w
+    open_deck_card_suit = image[mid-reslmean:mid-20, x_start_position+80:x_start_position + 130]     #   y :y+h, x :x+w
+    # showImage({'image1': open_deck_card_number, 'image2': open_deck_card_suit})
+    open_deck_card_number = get_card_name(open_deck_card_number)
+    open_deck_card_suit = get_card_name(open_deck_card_suit)
 
-    return joker_deck_card_name, [x_start_position, y_end_position]
+    response = {
+        'joker_deck':   joker_deck_card_name,
+        'position':     {
+            'x': x_start_position,
+            'y': y_end_position
+            },
+        'open_deck':    {
+            'number': open_deck_card_number,
+            'suit': open_deck_card_suit
+        }
+    }
+    return response
 
-def getOpenDeckCard(image_name, position):
+def getOpenDeckCard(image_name, y_position):
     image = cv2.imread(image_name)
     y_start_position = 0
     y_end_position = 0
-    start = position[1] + 300
+    start = y_position + 300
     for i in range(start, start + 1000):
         if ((image[i,700][0] != image[i,700][1]) and (image[i,700][0] != image[i,700][2]) and (image[i,700][1] != image[i,700][2])) and np.argmax(image[i,700]) == 1:
                 if (image[i+5,700][0] == image[i+5,700][1] == image[i+5,700][2]) or (image[i-5,700][0] == image[i-5,700][1] == image[i-5,700][2]):
