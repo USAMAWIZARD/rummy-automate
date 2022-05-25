@@ -9,15 +9,20 @@ ui_cards =     [[['5', 'diamonds'],
                 [['8', 'clubs'], ['9', 'clubs']],
                 [['8', 'hearts'], ['9', 'hearts'], ['10', 'hearts']],
                 [['2', 'spades'], ['4', 'spades'], ['5', 'spades']],
-                [['5', 'hearts']]]
+                [['5', 'hearts'], ['10', 'hearts']]]
 
-valid_cards = {'rest': {2: ['2', 'spades'], 8: ['8', 'diamonds'], 11: ['jack', 'diamonds']},
+# valid_cards = [[['2', 'spades'], ['8', 'diamonds'], ['10', 'hearts'], ['jack', 'diamonds']],
+#                 [['ace', 'joker'], ['8', 'clubs'], ['9', 'clubs']],
+#                 [['8', 'hearts'], ['9', 'hearts'], ['10', 'hearts']],
+#                 [['4', 'spades'], ['5', 'spades']],
+#                 [['5', 'diamonds'], ['5', 'hearts']]]
+
+valid_cards = {'rest': {2: ['2', 'spades'], 8: ['8', 'diamonds'], 10: ['10', 'hearts'], 11: ['jack', 'diamonds']},
                 'sequences': {'clubs-0': [['ace', 'joker'], ['8', 'clubs'], ['9', 'clubs']],
                             'hearts-0': [['8', 'hearts'], ['9', 'hearts'], ['10', 'hearts']],
                             'spades-0': [['4', 'spades'], ['5', 'spades']]},
                 'sets': {5: {'cards': [['5', 'diamonds'], ['5', 'hearts']],
                             'suits': ['diamonds', 'hearts']}}}
-
 
 def findMaximumCardNumber(p_ui_cards, p_sequence):
     max_cards = []
