@@ -21,7 +21,7 @@ for cards in bottom_cards:
 top_cards['cards'] = bottom_cards
 cards = top_cards
 pprint(cards)
-print("************")
+print('\n"*************************************************************************************************"\n')
 valid_cards = getValidCards(cards['cards'], [cards['open_deck']['number'], cards['open_deck']['suit']])
 pprint(valid_cards)
 # minimumSwaps(cards['cards'], valid_cards)

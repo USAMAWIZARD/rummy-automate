@@ -11,8 +11,7 @@ def showImage(images):
     cv2.destroyAllWindows()
 
 def get_cards_on_screen(image_name):
-    mycards=[]
-    image=cv2.imread(image_name)
+    image = cv2.imread(image_name)
     points = []
     for i in range(image.shape[0] - 10):
         if ((image[i,400][0] != image[i,400][1]) and (image[i,400][0] != image[i,400][2]) and (image[i,400][1] != image[i,400][2])) and np.argmax(image[i,400]) == 1:
@@ -28,7 +27,6 @@ def get_cards_on_screen(image_name):
     groupno=0
     
     while hi < (len(points)-1):
-
         b=91
         h = (points[hi+1] - points[hi])-130
         #cv2.rectangle(image, (400, points[hi]), (400 + 100, points[hi] ), (11,3,111), 3) #draw the rectangle around the total cards
@@ -36,8 +34,8 @@ def get_cards_on_screen(image_name):
         for i  in range(round(h/91)):
             #cv2.rectangle(image, (400-20, points[hi]), (400+90 , points[hi] +b), (11,i,111), 10) #draw the rectangle around the total cards
             c=b-90
-            firsthalf=image[points[hi] +c+10:points[hi]+c+90,400-20:400+ 90]  #y :y+h, x :x+w
-            secondhalf=image[points[hi] +c+10:points[hi]+c+90,400-110:400-100+92]
+            firsthalf = image[points[hi]+c+10:points[hi]+c+90, 400-20:400+ 90]  #y :y+h, x :x+w
+            secondhalf = image[points[hi]+c+10:points[hi]+c+90, 400-110:400-100+92]
             # thirdhalf=image[points[hi] +c+10:points[hi]+c+90,400-170:400-200+92]
             image_classified_firsthalf=get_card_name(firsthalf)
             image_classified_secondhalf=get_card_name(secondhalf)
@@ -46,9 +44,9 @@ def get_cards_on_screen(image_name):
             # if image_classified_thirdhalf=="JCard":
                 # mycards[groupno].append(["joker",image_classified_secondhalf])
             if image_classified_firsthalf=="joker":
-                mycards[groupno].append(["joker",None])
+                mycards[groupno].append(["joker", None, [points[hi]+c+10, points[hi]+c+90]])
             else:
-                mycards[groupno].append([image_classified_firsthalf,image_classified_secondhalf])
+                mycards[groupno].append([image_classified_firsthalf,image_classified_secondhalf, [points[hi]+c+10, points[hi]+c+90]])
             b += 91
             #cv2.imshow(image_classified_thirdhalf+str(i)+str(hi), thirdhalf)
         hi+=2
